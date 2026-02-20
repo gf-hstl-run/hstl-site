@@ -1,0 +1,387 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>HSTL — Showing Up > Showing Off</title>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+:root{
+    --bg:#020f0a;--bgm:#0b2e23;--bgc:#0d3829;
+    --tx:#ffffff;--tx2:#c8d6d0;--txm:#7a9189;
+    --ac:#4ade80;--acd:#163d2a;--acb:rgba(74,222,128,.25);
+    --wm:#f59e0b;
+}
+html{scroll-behavior:smooth}
+body{background:var(--bg);color:var(--tx);font-family:'Outfit',sans-serif;overflow-x:hidden;-webkit-font-smoothing:antialiased}
+
+/* ── AMBIENT BACKGROUND ── */
+.ambient{position:fixed;inset:0;pointer-events:none;z-index:0}
+.ambient::before{content:'';position:absolute;width:120vw;height:120vw;top:-30vh;left:-20vw;background:radial-gradient(circle,rgba(11,46,35,.5) 0%,transparent 55%);animation:drift 40s ease-in-out infinite alternate}
+.ambient::after{content:'';position:absolute;width:80vw;height:80vw;bottom:-20vh;right:-20vw;background:radial-gradient(circle,rgba(74,222,128,.03) 0%,transparent 50%);animation:drift 35s ease-in-out infinite alternate-reverse}
+@keyframes drift{0%{transform:translate(0,0)}100%{transform:translate(40px,30px)}}
+
+/* ── NOISE TEXTURE ── */
+.noise{position:fixed;inset:0;pointer-events:none;z-index:1;opacity:.035;
+    background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='1'/%3E%3C/svg%3E");
+    background-size:128px 128px}
+
+/* ── CONTENT WRAPPER ── */
+.content{position:relative;z-index:2}
+section{min-height:100vh;display:flex;flex-direction:column;justify-content:center;padding:10vh 8vw}
+@media(max-width:768px){section{padding:8vh 6vw}}
+
+/* ── SCROLL REVEAL ── */
+.reveal{opacity:0;transform:translateY(40px);transition:opacity 1s cubic-bezier(.16,1,.3,1),transform 1s cubic-bezier(.16,1,.3,1)}
+.reveal.visible{opacity:1;transform:none}
+.reveal-delay-1{transition-delay:.15s}
+.reveal-delay-2{transition-delay:.3s}
+.reveal-delay-3{transition-delay:.45s}
+.reveal-delay-4{transition-delay:.6s}
+.reveal-delay-5{transition-delay:.75s}
+
+/* ── HERO ── */
+.hero{min-height:100vh;display:flex;flex-direction:column;justify-content:center;align-items:center;text-align:center;position:relative}
+.hero-wordmark{font-size:clamp(80px,15vw,180px);font-weight:900;letter-spacing:-.06em;line-height:.85;color:var(--tx);margin-bottom:32px;
+    background:linear-gradient(180deg,#fff 40%,rgba(255,255,255,.3));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.hero-line{font-size:clamp(18px,2.8vw,32px);font-weight:300;color:var(--tx2);letter-spacing:.02em;line-height:1.4}
+.hero-line em{font-style:normal;color:var(--ac);font-weight:600}
+.scroll-hint{position:absolute;bottom:5vh;left:50%;transform:translateX(-50%);display:flex;flex-direction:column;align-items:center;gap:8px;opacity:.4}
+.scroll-hint span{font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:3px;text-transform:uppercase;color:var(--txm)}
+.scroll-hint i{color:var(--ac);font-size:14px;animation:bob 2s ease-in-out infinite}
+@keyframes bob{0%,100%{transform:translateY(0)}50%{transform:translateY(6px)}}
+
+/* ── MANIFESTO ── */
+.manifesto{max-width:800px;margin:0 auto}
+.manifesto h2{font-size:clamp(28px,4.5vw,52px);font-weight:800;line-height:1.15;letter-spacing:-.03em;margin-bottom:40px}
+.manifesto h2 .dim{color:var(--txm)}
+.manifesto h2 .glow{color:var(--ac)}
+.manifesto p{font-size:clamp(16px,2vw,20px);color:var(--tx2);line-height:1.7;margin-bottom:24px;font-weight:300}
+.manifesto p strong{color:var(--tx);font-weight:600}
+
+/* ── DIVIDER LINE ── */
+.line{width:60px;height:2px;background:var(--ac);opacity:.4;margin:0 auto}
+
+/* ── WHAT IS HSTL ── */
+.what{max-width:900px;margin:0 auto;text-align:center}
+.tag{font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:3px;text-transform:uppercase;color:var(--ac);margin-bottom:20px;opacity:.7}
+.what h2{font-size:clamp(28px,4vw,44px);font-weight:800;letter-spacing:-.03em;line-height:1.15;margin-bottom:20px}
+.what h2 em{font-style:normal;color:var(--ac)}
+.what .lead{font-size:clamp(16px,1.8vw,19px);color:var(--tx2);line-height:1.6;max-width:650px;margin:0 auto 48px;font-weight:300}
+
+/* ── PILLARS ── */
+.pillars{display:grid;grid-template-columns:repeat(3,1fr);gap:24px;max-width:960px;margin:0 auto}
+@media(max-width:768px){.pillars{grid-template-columns:1fr;max-width:400px}}
+.pillar{background:rgba(11,46,35,.35);border:1px solid rgba(74,222,128,.08);border-radius:16px;padding:32px 28px;transition:border-color .4s,transform .4s}
+.pillar:hover{border-color:var(--acb);transform:translateY(-4px)}
+.pillar .ic{font-size:28px;color:var(--ac);margin-bottom:16px;opacity:.8}
+.pillar h3{font-size:16px;font-weight:700;margin-bottom:10px}
+.pillar p{font-size:13px;color:var(--txm);line-height:1.55}
+
+/* ── FOR WHO ── */
+.for-who{max-width:900px;margin:0 auto}
+.for-grid{display:grid;grid-template-columns:1fr 1fr;gap:40px;margin-top:48px}
+@media(max-width:768px){.for-grid{grid-template-columns:1fr}}
+.for-card h3{font-size:22px;font-weight:800;margin-bottom:16px;letter-spacing:-.02em}
+.for-card h3 .ic{color:var(--ac);margin-right:10px;font-size:20px}
+.for-list{list-style:none;display:flex;flex-direction:column;gap:14px}
+.for-list li{font-size:14px;color:var(--tx2);display:flex;align-items:flex-start;gap:10px;line-height:1.5}
+.for-list li::before{content:'';width:6px;height:6px;background:var(--ac);border-radius:50%;margin-top:7px;flex-shrink:0;opacity:.6}
+
+/* ── HOW IT WORKS ── */
+.how{max-width:700px;margin:0 auto}
+.steps{display:flex;flex-direction:column;margin-top:48px}
+.step{display:grid;grid-template-columns:56px 1fr;gap:20px;align-items:start}
+.step + .step{margin-top:8px}
+.step-marker{display:flex;flex-direction:column;align-items:center}
+.step-num{width:44px;height:44px;border-radius:50%;background:var(--acd);border:1.5px solid var(--acb);display:flex;align-items:center;justify-content:center;font-family:'JetBrains Mono',monospace;font-size:15px;font-weight:700;color:var(--ac)}
+.step-line{width:2px;flex:1;background:linear-gradient(to bottom,var(--acb),transparent);margin-top:6px;min-height:24px}
+.step-body{padding:8px 0 28px}
+.step-body h4{font-size:17px;font-weight:700;margin-bottom:6px}
+.step-body p{font-size:13px;color:var(--txm);line-height:1.55}
+
+/* ── NOT STRAVA ── */
+.not{max-width:750px;margin:0 auto;text-align:center}
+.not .stack{display:grid;grid-template-columns:1fr auto 1fr;gap:0;margin-top:40px;align-items:center}
+@media(max-width:768px){.not .stack{grid-template-columns:1fr;gap:20px}}
+.not .col{padding:28px;border-radius:16px}
+.not .col-them{background:rgba(120,113,108,.06);border:1px solid rgba(120,113,108,.1)}
+.not .col-us{background:rgba(74,222,128,.06);border:1px solid var(--acb)}
+.not .col h4{font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:2px;text-transform:uppercase;margin-bottom:16px}
+.not .col-them h4{color:#78716c}
+.not .col-us h4{color:var(--ac)}
+.not .col p{font-size:14px;color:var(--tx2);line-height:1.7;text-align:left}
+.not .arrow{display:flex;align-items:center;justify-content:center;padding:0 20px}
+.not .arrow i{color:var(--ac);opacity:.3;font-size:18px}
+@media(max-width:768px){.not .arrow{transform:rotate(90deg)}}
+
+/* ── QUOTE BLOCK ── */
+.quote-section{text-align:center;max-width:700px;margin:0 auto}
+.bigquote{font-size:clamp(32px,5vw,56px);font-weight:800;letter-spacing:-.04em;line-height:1.1;margin-bottom:24px}
+.bigquote .glow{color:var(--ac)}
+.bigquote .dim{color:var(--txm)}
+.subquote{font-size:clamp(15px,1.8vw,18px);color:var(--txm);font-weight:300;line-height:1.6}
+
+/* ── CTA ── */
+.cta-section{text-align:center;max-width:600px;margin:0 auto}
+.cta-section h2{font-size:clamp(28px,4vw,40px);font-weight:800;letter-spacing:-.03em;margin-bottom:16px}
+.cta-section h2 em{font-style:normal;color:var(--ac)}
+.cta-section .lead{font-size:16px;color:var(--tx2);line-height:1.6;margin-bottom:40px;font-weight:300}
+.cta-buttons{display:flex;gap:16px;justify-content:center;flex-wrap:wrap;margin-bottom:48px}
+.btn{display:inline-flex;align-items:center;gap:10px;padding:16px 32px;border-radius:100px;font-family:'Outfit',sans-serif;font-size:15px;font-weight:600;text-decoration:none;transition:all .3s;cursor:pointer;border:none}
+.btn-primary{background:var(--ac);color:var(--bg)}
+.btn-primary:hover{background:#6ee7a0;transform:translateY(-2px);box-shadow:0 8px 30px rgba(74,222,128,.25)}
+.btn-ghost{background:transparent;color:var(--ac);border:1px solid var(--acb)}
+.btn-ghost:hover{background:rgba(74,222,128,.08);transform:translateY(-2px)}
+.socials{display:flex;gap:24px;justify-content:center;margin-top:8px}
+.socials a{color:var(--txm);font-size:22px;transition:color .3s}
+.socials a:hover{color:var(--ac)}
+
+/* ── FOOTER ── */
+footer{text-align:center;padding:40px 8vw 48px;border-top:1px solid rgba(74,222,128,.06)}
+footer p{font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--txm);letter-spacing:1px;opacity:.4}
+
+/* ── FLOATING PILL ── */
+.float-pill{position:fixed;top:20px;left:50%;transform:translateX(-50%);z-index:100;background:rgba(2,15,10,.7);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);border:1px solid rgba(74,222,128,.12);border-radius:100px;padding:10px 24px;display:flex;align-items:center;gap:12px;opacity:0;transition:opacity .5s,transform .5s;transform:translateX(-50%) translateY(-10px)}
+.float-pill.show{opacity:1;transform:translateX(-50%) translateY(0)}
+.float-pill .mark{font-weight:900;font-size:16px;letter-spacing:-.04em}
+.float-pill .sep{width:1px;height:16px;background:rgba(74,222,128,.2)}
+.float-pill a{font-size:12px;color:var(--ac);text-decoration:none;font-weight:600;transition:opacity .3s}
+.float-pill a:hover{opacity:.7}
+
+/* ── SPACER ── */
+.spacer{height:20vh;display:flex;align-items:center;justify-content:center}
+</style>
+</head>
+<body>
+
+<div class="ambient"></div>
+<div class="noise"></div>
+
+<!-- FLOATING NAV PILL -->
+<div class="float-pill" id="floatPill">
+    <span class="mark">HSTL</span>
+    <span class="sep"></span>
+    <a href="#download">Get the app</a>
+</div>
+
+<div class="content">
+
+    <!-- ═══ HERO ═══ -->
+    <section class="hero">
+        <div class="hero-wordmark reveal">HSTL</div>
+        <div class="hero-line reveal reveal-delay-1">
+            <em>Showing up</em> &gt; Showing off
+        </div>
+        <div class="scroll-hint">
+            <span>Scroll</span>
+            <i class="fa-solid fa-chevron-down"></i>
+        </div>
+    </section>
+
+    <!-- ═══ MANIFESTO ═══ -->
+    <section>
+        <div class="manifesto">
+            <h2 class="reveal">
+                The world measures runners by<br>
+                <span class="dim">how fast they go.</span><br>
+                We measure them by<br>
+                <span class="glow">whether they showed up.</span>
+            </h2>
+            <p class="reveal reveal-delay-1">
+                Not your split time. Not your VO2 max. Not how many followers watched your finish line photo.
+            </p>
+            <p class="reveal reveal-delay-2">
+                <strong>Showing up is the hardest part.</strong> Getting out of bed when it's dark. Choosing the run over the couch. Being there for your crew on a cold Wednesday when nobody would blame you for staying home.
+            </p>
+            <p class="reveal reveal-delay-3">
+                Show up for yourself. For your club. For the person next to you who's faster and the one who's slower. None of it counts if you're not there.
+            </p>
+            <p class="reveal reveal-delay-4">
+                <strong>HSTL makes showing up count.</strong>
+            </p>
+        </div>
+    </section>
+
+    <!-- ═══ DIVIDER ═══ -->
+    <div class="spacer"><div class="line reveal"></div></div>
+
+    <!-- ═══ WHAT IS HSTL ═══ -->
+    <section>
+        <div class="what">
+            <div class="tag reveal">What is HSTL</div>
+            <h2 class="reveal reveal-delay-1">The <em>consistency layer</em><br>for run clubs</h2>
+            <p class="lead reveal reveal-delay-2">
+                HSTL sits alongside the tools you already use. Strava tracks your training. WhatsApp coordinates your group. Instagram tells your story. HSTL does the one thing none of them can: verify who actually showed up, and make that matter.
+            </p>
+        </div>
+        <div class="pillars">
+            <div class="pillar reveal reveal-delay-1">
+                <div class="ic"><i class="fa-solid fa-location-dot"></i></div>
+                <h3>Verified attendance</h3>
+                <p>GPS check-in at the run. Optional Strava proof. No guessing, no spreadsheets, no "I was there, I swear."</p>
+            </div>
+            <div class="pillar reveal reveal-delay-2">
+                <div class="ic"><i class="fa-solid fa-fire"></i></div>
+                <h3>Streaks and consistency</h3>
+                <p>Active weeks. Current streaks. The kind of recognition that rewards commitment, not just speed.</p>
+            </div>
+            <div class="pillar reveal reveal-delay-3">
+                <div class="ic"><i class="fa-solid fa-heart-pulse"></i></div>
+                <h3>Club pulse</h3>
+                <p>Who's your core? Who's drifting? Turnout trends, returning runners, the health of your community — visible at a glance.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- ═══ FOR WHO ═══ -->
+    <section>
+        <div class="for-who">
+            <div class="tag reveal">Who it's for</div>
+            <h2 class="reveal reveal-delay-1" style="font-size:clamp(28px,4vw,40px);font-weight:800;letter-spacing:-.03em">Two kinds of people. <span style="color:var(--ac)">Same belief.</span></h2>
+            <div class="for-grid">
+                <div class="for-card reveal reveal-delay-2">
+                    <h3><span class="ic"><i class="fa-solid fa-person-running"></i></span>Runners</h3>
+                    <ul class="for-list">
+                        <li>See all your club runs in one place</li>
+                        <li>Build a streak that means something</li>
+                        <li>Get recognised for consistency, not pace</li>
+                        <li>Drop into other clubs without losing your identity</li>
+                        <li>Your career — every run, every club, every milestone</li>
+                    </ul>
+                </div>
+                <div class="for-card reveal reveal-delay-3">
+                    <h3><span class="ic"><i class="fa-regular fa-flag"></i></span>Club organisers</h3>
+                    <ul class="for-list">
+                        <li>Know who showed up without taking a register</li>
+                        <li>Spot your core members and who's drifting</li>
+                        <li>Turnout trends, retention, real metrics</li>
+                        <li>Recognise your community with streaks and rewards</li>
+                        <li>Data that proves your club's value — to brands and sponsors</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ═══ HOW IT WORKS ═══ -->
+    <section>
+        <div class="how">
+            <div class="tag reveal">How it works</div>
+            <h2 class="reveal reveal-delay-1" style="font-size:clamp(28px,4vw,40px);font-weight:800;letter-spacing:-.03em">Simple. <span style="color:var(--ac)">By design.</span></h2>
+            <div class="steps">
+                <div class="step reveal reveal-delay-1">
+                    <div class="step-marker"><div class="step-num">1</div><div class="step-line"></div></div>
+                    <div class="step-body"><h4>Join your club</h4><p>Find your run club in the directory, or ask your organiser to list it. One tap to join.</p></div>
+                </div>
+                <div class="step reveal reveal-delay-2">
+                    <div class="step-marker"><div class="step-num">2</div><div class="step-line"></div></div>
+                    <div class="step-body"><h4>Show up</h4><p>See upcoming runs, tap "I'm in", and get there. That's the hard part. We know.</p></div>
+                </div>
+                <div class="step reveal reveal-delay-3">
+                    <div class="step-marker"><div class="step-num">3</div><div class="step-line"></div></div>
+                    <div class="step-body"><h4>Check in</h4><p>GPS check-in at the run location. One tap. Your attendance is verified, your streak lives on.</p></div>
+                </div>
+                <div class="step reveal reveal-delay-4">
+                    <div class="step-marker"><div class="step-num">4</div></div>
+                    <div class="step-body"><h4>Watch it build</h4><p>Active weeks. Streaks. Milestones. Leaderboards based on consistency. Your club career, building week by week.</p></div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ═══ NOT STRAVA ═══ -->
+    <section>
+        <div class="not">
+            <div class="tag reveal">The stack</div>
+            <h2 class="reveal reveal-delay-1" style="font-size:clamp(24px,3.5vw,36px);font-weight:800;letter-spacing:-.03em">HSTL fits around<br>what you already use</h2>
+            <div class="stack reveal reveal-delay-2">
+                <div class="col col-them">
+                    <h4>Your current tools</h4>
+                    <p><strong style="color:var(--tx)">Strava</strong> — routes, activity, training log<br><br>
+                    <strong style="color:var(--tx)">WhatsApp</strong> — coordination, chat, plans<br><br>
+                    <strong style="color:var(--tx)">Instagram</strong> — vibe, storytelling, growth</p>
+                </div>
+                <div class="arrow"><i class="fa-solid fa-plus"></i></div>
+                <div class="col col-us">
+                    <h4>HSTL adds</h4>
+                    <p><strong style="color:var(--tx)">Verified presence</strong> — who actually showed up<br><br>
+                    <strong style="color:var(--tx)">Consistency</strong> — streaks, active weeks, club career<br><br>
+                    <strong style="color:var(--tx)">Recognition</strong> — rewards for commitment, not pace</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ═══ BIG QUOTE ═══ -->
+    <section>
+        <div class="quote-section">
+            <div class="bigquote reveal">
+                <span class="dim">The run is</span> 30 minutes.<br>
+                <span class="glow">The decision to show up</span><br>
+                <span class="dim">is the whole thing.</span>
+            </div>
+            <p class="subquote reveal reveal-delay-1">
+                Every streak started with one check-in.<br>
+                Every community was built by the people who kept coming back.
+            </p>
+        </div>
+    </section>
+
+    <!-- ═══ CTA ═══ -->
+    <section id="download">
+        <div class="cta-section">
+            <div class="tag reveal">Start here</div>
+            <h2 class="reveal reveal-delay-1">Ready to <em>show up</em>?</h2>
+            <p class="lead reveal reveal-delay-2">
+                Download HSTL. Find your club. Check in this week.<br>
+                It starts with one run.
+            </p>
+            <div class="cta-buttons reveal reveal-delay-3">
+                <a href="https://play.google.com/store/apps/details?id=com.hstl.app" class="btn btn-primary" target="_blank">
+                    <i class="fa-brands fa-google-play"></i> Google Play
+                </a>
+                <a href="https://apps.apple.com/app/hstl" class="btn btn-ghost" target="_blank">
+                    <i class="fa-brands fa-apple"></i> App Store
+                </a>
+            </div>
+            <div class="socials reveal reveal-delay-4">
+                <a href="https://instagram.com/hstl.app" target="_blank" aria-label="Instagram"><i class="fa-brands fa-instagram"></i></a>
+                <a href="mailto:hello@hstl.app" aria-label="Email"><i class="fa-solid fa-envelope"></i></a>
+            </div>
+        </div>
+    </section>
+
+    <!-- ═══ FOOTER ═══ -->
+    <footer>
+        <p>HSTL &mdash; SHOWING UP &gt; SHOWING OFF</p>
+    </footer>
+
+</div>
+
+<script>
+// Scroll reveals
+const obs = new IntersectionObserver((entries) => {
+    entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('visible'); obs.unobserve(e.target); } });
+}, { threshold: 0.15, rootMargin: '0px 0px -40px 0px' });
+document.querySelectorAll('.reveal').forEach(el => obs.observe(el));
+
+// Floating pill
+const pill = document.getElementById('floatPill');
+const hero = document.querySelector('.hero');
+const pilObs = new IntersectionObserver(([e]) => {
+    pill.classList.toggle('show', !e.isIntersecting);
+}, { threshold: 0 });
+pilObs.observe(hero);
+
+// Fade scroll hint
+const hint = document.querySelector('.scroll-hint');
+window.addEventListener('scroll', () => {
+    if (hint) hint.style.opacity = Math.max(0, 1 - window.scrollY / 300);
+}, { passive: true });
+</script>
+
+</body>
+</html>
