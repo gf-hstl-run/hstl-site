@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Terms of Service — HSTL Running</title>
+    <meta name="description" content="HSTL Running Terms of Service">
+    <link rel="icon" type="image/png" href="/logo.png">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg: #020f0a; --bgm: #0b2e23; --bgc: rgba(11,46,35,0.5);
+            --tx: #ffffff; --tx2: #c8d6d0; --txm: #7a9189;
+            --ac: #4ade80; --acd: rgba(74,222,128,0.15); --acb: rgba(74,222,128,0.25);
+        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        ::selection { background: var(--ac); color: var(--bg); }
+        body { background: var(--bg); color: var(--tx); font-family: 'Outfit', sans-serif; -webkit-font-smoothing: antialiased; }
+        ::-webkit-scrollbar { width: 5px; }
+        ::-webkit-scrollbar-track { background: var(--bg); }
+        ::-webkit-scrollbar-thumb { background: rgba(74,222,128,0.2); border-radius: 10px; }
+
+        nav { position: fixed; top: 0; left: 0; right: 0; z-index: 100; background: rgba(2,15,10,0.88); backdrop-filter: blur(24px); -webkit-backdrop-filter: blur(24px); border-bottom: 1px solid rgba(74,222,128,0.06); padding: 0.7rem 1.5rem; }
+        .nav-inner { max-width: 1280px; margin: 0 auto; display: flex; align-items: center; justify-content: space-between; }
+        .nav-brand { display: flex; align-items: center; gap: 10px; text-decoration: none; }
+        .nav-logo { width: 32px; height: 32px; border-radius: 8px; object-fit: cover; }
+        .nav-wordmark { font-size: 1.1rem; font-weight: 900; letter-spacing: -0.04em; text-transform: uppercase; color: var(--tx); }
+        .nav-back { font-family: 'JetBrains Mono', monospace; font-size: 11px; letter-spacing: 2px; text-transform: uppercase; color: var(--txm); text-decoration: none; transition: color 0.2s; display: flex; align-items: center; gap: 6px; }
+        .nav-back:hover { color: var(--ac); }
+
+        .legal-hero { padding: 8rem 1.5rem 3rem; text-align: center; position: relative; }
+        .legal-hero::before { content: ''; position: absolute; top: -10%; left: 30%; width: 40%; height: 40%; border-radius: 50%; background: radial-gradient(circle, rgba(11,46,35,0.4) 0%, transparent 70%); filter: blur(80px); pointer-events: none; }
+        .legal-hero h1 { font-size: clamp(2rem, 5vw, 3rem); font-weight: 900; letter-spacing: -0.03em; margin-bottom: 0.75rem; }
+        .legal-hero .meta { font-family: 'JetBrains Mono', monospace; font-size: 11px; letter-spacing: 2px; text-transform: uppercase; color: var(--txm); }
+
+        .legal-content { max-width: 740px; margin: 0 auto; padding: 2rem 1.5rem 6rem; }
+        .legal-content h2 { font-size: 1.35rem; font-weight: 800; margin-top: 3rem; margin-bottom: 1rem; color: var(--tx); letter-spacing: -0.02em; }
+        .legal-content h3 { font-size: 1.05rem; font-weight: 700; margin-top: 2rem; margin-bottom: 0.75rem; color: var(--tx2); }
+        .legal-content p, .legal-content li { font-size: 0.92rem; color: var(--tx2); line-height: 1.8; margin-bottom: 0.85rem; }
+        .legal-content ul { padding-left: 1.25rem; margin-bottom: 1rem; }
+        .legal-content li { margin-bottom: 0.4rem; }
+        .legal-content li::marker { color: var(--ac); }
+        .legal-content a { color: var(--ac); text-decoration: none; }
+        .legal-content a:hover { text-decoration: underline; }
+        .legal-content .caps-block { font-size: 0.85rem; color: var(--tx2); line-height: 1.75; margin-bottom: 0.85rem; text-transform: uppercase; letter-spacing: 0.01em; }
+        .contact-box { background: var(--acd); border: 1px solid var(--acb); border-radius: 12px; padding: 1.25rem 1.5rem; margin-top: 1rem; }
+        .contact-box p { margin-bottom: 0; color: var(--tx); }
+
+        footer { padding: 2rem 1.5rem; border-top: 1px solid rgba(74,222,128,0.06); text-align: center; }
+        footer p { font-family: 'JetBrains Mono', monospace; font-size: 10px; color: var(--txm); letter-spacing: 1.5px; text-transform: uppercase; }
+        footer a { color: var(--txm); text-decoration: none; margin: 0 0.75rem; transition: color 0.2s; }
+        footer a:hover { color: var(--ac); }
+
+        @media (max-width: 768px) { .legal-hero { padding: 7rem 1.25rem 2rem; } .legal-content { padding: 2rem 1.25rem 4rem; } }
+    </style>
+</head>
+<body>
+
+<nav><div class="nav-inner">
+    <a href="/" class="nav-brand"><img src="/logo.png" alt="HSTL" class="nav-logo"><span class="nav-wordmark">HSTL</span></a>
+    <a href="/" class="nav-back"><i class="fa-solid fa-arrow-left"></i> Back to Home</a>
+</div></nav>
+
+<div class="legal-hero">
+    <h1>Terms of Service</h1>
+    <p class="meta">Last updated: 26 February 2026</p>
+</div>
+
+<div class="legal-content">
+
+<p>These Terms of Service (the "Terms") govern your access to and use of the HSTL mobile apps, website, and related services (the "Services"). By creating an account, accessing, or using the Services, you agree to these Terms.</p>
+<p>If you do not agree, do not use the Services.</p>
+
+<h2>1) Who we are</h2>
+<p>HSTL is operated by Gareth Forbes ("HSTL", "we", "us", "our"), based in the Netherlands.</p>
+<p>Contact: <a href="mailto:admin@hstl.run">admin@hstl.run</a></p>
+
+<h2>2) What HSTL is (and isn't)</h2>
+<p>HSTL is a participation and consistency layer for running clubs:</p>
+<ul>
+    <li>clubs publish sessions</li>
+    <li>runners check in</li>
+    <li>HSTL calculates consistency and displays club-specific metrics</li>
+    <li>clubs and brand partners may offer rewards tied to participation milestones</li>
+</ul>
+<p>HSTL does not:</p>
+<ul>
+    <li>organise or supervise physical events</li>
+    <li>guarantee event safety, route accuracy, or participant behaviour</li>
+    <li>provide medical advice, training advice, or safety certification</li>
+    <li>issue, fund, or guarantee rewards, voucher codes, or discounts offered by clubs or brand partners</li>
+</ul>
+<p>Clubs, brand partners, and runners remain responsible for their real-world decisions and safety.</p>
+
+<h2>3) Eligibility</h2>
+<p>You must be at least 16 years old to use the Services.</p>
+
+<h2>4) Accounts and authentication</h2>
+<p>You may need an account to use core features. You agree to:</p>
+<ul>
+    <li>provide accurate information</li>
+    <li>keep your account secure</li>
+    <li>not share or sell access to your account</li>
+    <li>notify us if you suspect unauthorised use</li>
+</ul>
+<p>We may suspend or terminate accounts that violate these Terms.</p>
+
+<h2>5) Clubs, admins, and permissions</h2>
+<h3>A. Club admins</h3>
+<p>Certain users may be granted admin privileges to manage a club (e.g., create sessions, manage rewards, view club metrics). Admins agree to:</p>
+<ul>
+    <li>use admin features responsibly</li>
+    <li>respect member privacy</li>
+    <li>not misuse member data or harass members</li>
+    <li>not create misleading, unsafe, or fraudulent sessions</li>
+    <li>ensure any rewards or incentives offered through the Services are legitimate, properly funded, and comply with applicable laws</li>
+</ul>
+
+<h3>B. Multiple admins</h3>
+<p>A club may have multiple admins. Clubs are responsible for controlling who has admin access and for actions taken by admins under their accounts.</p>
+
+<h2>6) Check-ins, verification, and anti-gaming</h2>
+<p>HSTL depends on fair participation. You agree not to:</p>
+<ul>
+    <li>check in without attending</li>
+    <li>spoof GPS or location</li>
+    <li>submit false Strava proof</li>
+    <li>create or use automation to farm check-ins, rewards, or rankings</li>
+    <li>share, sell, or transfer reward codes earned by another user</li>
+    <li>attempt to claim rewards through manipulated or falsified participation data</li>
+</ul>
+<p>We may:</p>
+<ul>
+    <li>remove or invalidate check-ins</li>
+    <li>adjust metrics and rankings</li>
+    <li>revoke or invalidate reward claims and voucher codes</li>
+    <li>suspend accounts and/or clubs for abuse</li>
+    <li>restrict features to protect integrity</li>
+</ul>
+
+<h2>7) Community behaviour</h2>
+<p>You agree not to use the Services to:</p>
+<ul>
+    <li>harass, threaten, or discriminate</li>
+    <li>impersonate others</li>
+    <li>post illegal content</li>
+    <li>interfere with the Services (e.g., attacks, scraping, reverse engineering, bypassing security)</li>
+</ul>
+
+<h2>8) User content and club content</h2>
+<p>You may submit content such as:</p>
+<ul>
+    <li>club details, session titles/descriptions, images, links</li>
+    <li>profile information</li>
+    <li>raffle and reward details</li>
+</ul>
+<p>You retain ownership of your content, but you grant HSTL a worldwide, non-exclusive, royalty-free license to host, use, display, and distribute it within the Services to operate and promote the product (for example, showing a session page, or showing a club logo inside the app). You represent you have the rights to submit this content.</p>
+
+<h2>9) Third-party services (Strava, Shopify, and others)</h2>
+<p>The Services may integrate with third parties (e.g., Strava, Shopify) or link to third-party services. Reward codes may be issued through third-party platforms such as Shopify. Your use of third-party services is subject to their terms and policies. HSTL is not responsible for third-party outages, changes, or redemption issues.</p>
+
+<h2>10) Rewards, voucher codes, entries, and raffles</h2>
+<h3>A. Reward Cards</h3>
+<p>Clubs and their brand partners may offer rewards through the Services, including discount codes, vouchers, and other incentives tied to participation milestones such as streaks or check-in counts.</p>
+<p>Rewards, voucher codes, and discount codes are provided by the relevant club or brand partner. HSTL facilitates the delivery of rewards but is not the issuer. HSTL is not responsible for the redemption, validity, value, or expiry of any reward or code. If you have trouble redeeming a reward, contact the issuing club or brand using the support contact provided on the reward card.</p>
+<p>Reward codes are personal to the runner who earned them. Sharing, selling, or transferring codes may void them at the issuing brand's discretion.</p>
+<p>Reward codes may have an expiry date. It is your responsibility to use codes before they expire. HSTL is not responsible for expired or unused codes.</p>
+<p>HSTL reserves the right to modify, pause, or remove reward features at any time to prevent abuse, protect integrity, or comply with law.</p>
+
+<h3>B. Entries and raffles (if enabled)</h3>
+<p>Entries have no cash value. Entries are used only within the app for allocation to raffles where enabled. Raffles are administered by clubs and/or HSTL tooling; rules may vary by club. We may modify, suspend, or end raffles to prevent abuse or comply with law. Where required, clubs are responsible for ensuring their raffles comply with local laws.</p>
+
+<h2>11) Privacy</h2>
+<p>Our handling of personal data is described in the <a href="/privacy-policy">Privacy Policy</a>. By using the Services, you acknowledge that we process data as described there.</p>
+
+<h2>12) Intellectual property</h2>
+<p>The Services, including software, design, trademarks, and logos (excluding user content), are owned by HSTL and protected by law. You may not copy, modify, distribute, sell, lease, reverse engineer, or create derivative works from the Services except as permitted by law.</p>
+
+<h2>13) Availability and changes</h2>
+<p>We may change, suspend, or discontinue any part of the Services at any time. We will try to keep the Services available, but we do not guarantee uninterrupted access.</p>
+
+<h2>14) Termination</h2>
+<p>You can stop using the Services at any time and delete your account in the app.</p>
+<p>We may suspend or terminate your access if:</p>
+<ul>
+    <li>you violate these Terms</li>
+    <li>you create risk or legal exposure for HSTL or others</li>
+    <li>we must do so to comply with law</li>
+</ul>
+
+<h2>15) Disclaimers</h2>
+<p class="caps-block">THE SERVICES ARE PROVIDED "AS IS" AND "AS AVAILABLE". TO THE MAXIMUM EXTENT PERMITTED BY LAW, HSTL DISCLAIMS ALL WARRANTIES, EXPRESS OR IMPLIED, INCLUDING FITNESS FOR A PARTICULAR PURPOSE AND NON-INFRINGEMENT.</p>
+<p class="caps-block">RUNNING AND GROUP EVENTS INVOLVE RISK. YOU ARE RESPONSIBLE FOR YOUR OWN SAFETY, HEALTH, AND DECISIONS.</p>
+<p class="caps-block">REWARDS AND VOUCHER CODES ARE PROVIDED BY CLUBS AND BRAND PARTNERS, NOT BY HSTL. HSTL MAKES NO WARRANTY REGARDING THE VALUE, AVAILABILITY, OR USABILITY OF ANY REWARD.</p>
+
+<h2>16) Limitation of liability</h2>
+<p class="caps-block">TO THE MAXIMUM EXTENT PERMITTED BY LAW:</p>
+<p class="caps-block">HSTL WILL NOT BE LIABLE FOR INDIRECT, INCIDENTAL, SPECIAL, CONSEQUENTIAL, OR PUNITIVE DAMAGES</p>
+<p class="caps-block">HSTL WILL NOT BE LIABLE FOR INJURY, LOSS, OR DAMAGES ARISING FROM REAL-WORLD EVENTS OR THIRD-PARTY SERVICES</p>
+<p class="caps-block">HSTL WILL NOT BE LIABLE FOR LOSS ARISING FROM THE NON-REDEMPTION, EXPIRY, OR INVALIDITY OF REWARD CODES OR VOUCHERS ISSUED BY CLUBS OR BRAND PARTNERS</p>
+<p class="caps-block">HSTL'S TOTAL LIABILITY FOR ANY CLAIM WILL NOT EXCEED €50 OR THE AMOUNT YOU PAID TO HSTL IN THE 12 MONTHS BEFORE THE CLAIM (WHICHEVER IS GREATER)</p>
+<p>Some jurisdictions do not allow certain limitations; in that case, the limitation applies to the maximum extent allowed.</p>
+
+<h2>17) Indemnity</h2>
+<p>If you use the Services in a way that causes legal claims against HSTL (for example, you post infringing content, commit fraud, or issue fraudulent rewards), you agree to indemnify and hold HSTL harmless from resulting claims, liabilities, and reasonable costs.</p>
+
+<h2>18) Governing law and jurisdiction</h2>
+<p>These Terms are governed by the laws of the Netherlands. Disputes will be brought in the courts of Amsterdam, unless mandatory law says otherwise.</p>
+
+<h2>19) Changes to these Terms</h2>
+<p>We may update these Terms. We will post updated Terms on hstl.run and update the "Last updated" date. If changes are material, we may also notify you in-app or by email. Continued use after the update means you accept the updated Terms.</p>
+
+<h2>20) Contact</h2>
+<div class="contact-box">
+    <p>Email: <a href="mailto:admin@hstl.run">admin@hstl.run</a></p>
+</div>
+
+</div>
+
+<footer>
+    <p>&copy; 2026 HSTL Running</p>
+    <div style="margin-top:0.75rem;">
+        <a href="/">Home</a>
+        <a href="/terms-of-service">Terms</a>
+        <a href="/privacy-policy">Privacy</a>
+    </div>
+</footer>
+
+</body>
+</html>
