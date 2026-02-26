@@ -43,10 +43,11 @@
 
         * { margin: 0; padding: 0; box-sizing: border-box; }
         ::selection { background: var(--ac); color: var(--bg); }
-        html.lenis, html.lenis body { height: auto; }
-        .lenis.lenis-smooth { scroll-behavior: auto !important; }
-        .lenis.lenis-smooth [data-lenis-prevent] { overscroll-behavior: contain; }
-        .lenis.lenis-stopped { overflow: hidden; }
+        /* Lenis — desktop only, disabled on touch */
+        html.lenis-desktop, html.lenis-desktop body { height: auto; }
+        .lenis-desktop.lenis-smooth { scroll-behavior: auto !important; }
+        .lenis-desktop.lenis-smooth [data-lenis-prevent] { overscroll-behavior: contain; }
+        .lenis-desktop.lenis-stopped { overflow: hidden; }
 
         body {
             background: var(--bg);
@@ -843,42 +844,64 @@
 (function() {
     'use strict';
 
-    // ─── LENIS SMOOTH SCROLL ───
-    const lenis = new Lenis({
-        duration: 1.2,
-        easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
-        orientation: 'vertical',
-        gestureOrientation: 'vertical',
-        smoothWheel: true,
-        wheelMultiplier: 0.8,
-        touchMultiplier: 1.5,
-    });
+    // ─── DETECT TOUCH DEVICE ───
+    const isTouch = ('ontouchstart' in window) || navigator.maxTouchPoints > 0;
+    let lenis = null;
 
-    // Connect Lenis to GSAP ScrollTrigger
-    lenis.on('scroll', ScrollTrigger.update);
-    gsap.ticker.add((time) => lenis.raf(time * 1000));
-    gsap.ticker.lagSmoothing(0);
+    // ─── LENIS — DESKTOP ONLY ───
+    // Lenis hijacks scroll on mobile Chrome and breaks position:fixed nav.
+    // On touch devices we use native scroll which works reliably everywhere.
+    if (!isTouch) {
+        lenis = new Lenis({
+            duration: 1.2,
+            easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
+            orientation: 'vertical',
+            gestureOrientation: 'vertical',
+            smoothWheel: true,
+            wheelMultiplier: 0.8,
+        });
+        document.documentElement.classList.add('lenis-desktop');
+        lenis.on('scroll', ScrollTrigger.update);
+        gsap.ticker.add((time) => lenis.raf(time * 1000));
+        gsap.ticker.lagSmoothing(0);
+    }
 
-    // Anchor link smooth scroll via Lenis
+    // ─── ANCHOR SMOOTH SCROLL ───
     document.querySelectorAll('a[href^="#"]').forEach(a => {
         a.addEventListener('click', e => {
             const target = document.querySelector(a.getAttribute('href'));
-            if (target) { e.preventDefault(); lenis.scrollTo(target, { offset: -80 }); }
+            if (!target) return;
+            e.preventDefault();
+            if (lenis) {
+                lenis.scrollTo(target, { offset: -80 });
+            } else {
+                target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            }
         });
     });
 
-    // ─── NAV ───
+    // ─── NAV — ALWAYS WORKS (native scroll listener as primary) ───
     const nav = document.getElementById('nav');
-    ScrollTrigger.create({
-        start: 'top -40',
-        onUpdate: (self) => nav.classList.toggle('scrolled', self.progress > 0),
-    });
+    function checkNav() {
+        nav.classList.toggle('scrolled', window.scrollY > 40);
+    }
+    window.addEventListener('scroll', checkNav, { passive: true });
+    checkNav(); // initial state
 
     // ─── MOBILE MENU ───
     const overlay = document.getElementById('mobileOverlay');
-    document.getElementById('mobileMenuBtn').addEventListener('click', () => { overlay.classList.add('open'); lenis.stop(); });
-    document.getElementById('mobileClose').addEventListener('click', () => { overlay.classList.remove('open'); lenis.start(); });
-    window.closeMobile = () => { overlay.classList.remove('open'); lenis.start(); };
+    document.getElementById('mobileMenuBtn').addEventListener('click', () => {
+        overlay.classList.add('open');
+        if (lenis) lenis.stop();
+        document.body.style.overflow = 'hidden';
+    });
+    function closeMobileMenu() {
+        overlay.classList.remove('open');
+        if (lenis) lenis.start();
+        document.body.style.overflow = '';
+    }
+    document.getElementById('mobileClose').addEventListener('click', closeMobileMenu);
+    window.closeMobile = closeMobileMenu;
 
     // ─── HERO ENTRANCE ───
     const heroTl = gsap.timeline({ defaults: { ease: 'power3.out' } });
@@ -889,28 +912,14 @@
         .to('#heroBtns', { opacity: 1, y: 0, duration: 0.7 }, '-=0.4')
         .to('#heroScroll', { opacity: 1, duration: 1 }, '-=0.2');
 
-    // Hero parallax on scroll — logo shrinks, text fades
+    // Hero parallax on scroll
     gsap.to('.hero-content', {
-        scrollTrigger: {
-            trigger: '.hero',
-            start: 'top top',
-            end: 'bottom top',
-            scrub: 0.5,
-        },
-        y: -120,
-        opacity: 0,
-        scale: 0.95,
-        ease: 'none',
+        scrollTrigger: { trigger: '.hero', start: 'top top', end: 'bottom top', scrub: 0.5 },
+        y: -120, opacity: 0, scale: 0.95, ease: 'none',
     });
     gsap.to('#heroScroll', {
-        scrollTrigger: {
-            trigger: '.hero',
-            start: 'top top',
-            end: '30% top',
-            scrub: true,
-        },
-        opacity: 0,
-        y: -30,
+        scrollTrigger: { trigger: '.hero', start: 'top top', end: '30% top', scrub: true },
+        opacity: 0, y: -30,
     });
 
     // ─── AMBIENT ORB PARALLAX ───
@@ -922,118 +931,64 @@
         scrollTrigger: { trigger: 'body', start: 'top top', end: 'bottom bottom', scrub: 1 },
         y: -250, x: -80, ease: 'none',
     });
-    // Orb 3: appears mid-page
     gsap.to('#ambOrb3', {
-        scrollTrigger: {
-            trigger: '#runners',
-            start: 'top 80%',
-            end: 'bottom 20%',
-            scrub: 1,
-        },
+        scrollTrigger: { trigger: '#runners', start: 'top 80%', end: 'bottom 20%', scrub: 1 },
         opacity: 1, y: -200, ease: 'none',
     });
 
     // ─── SECTION FADES ───
     document.querySelectorAll('[data-gsap="fade"]').forEach(el => {
-        gsap.to(el, {
-            scrollTrigger: {
-                trigger: el,
-                start: 'top 88%',
-                end: 'top 55%',
-                scrub: 0.6,
-            },
-            opacity: 1,
-            y: 0,
-            ease: 'power2.out',
-        });
         gsap.set(el, { opacity: 0, y: 40 });
+        gsap.to(el, {
+            scrollTrigger: { trigger: el, start: 'top 88%', end: 'top 55%', scrub: 0.6 },
+            opacity: 1, y: 0, ease: 'power2.out',
+        });
     });
 
     // ─── STAGGERED CARD REVEALS ───
     document.querySelectorAll('.ethos-grid, .features-grid').forEach(grid => {
         const cards = grid.querySelectorAll('[data-gsap="card"]');
         gsap.to(cards, {
-            scrollTrigger: {
-                trigger: grid,
-                start: 'top 82%',
-                end: 'top 40%',
-                scrub: 0.5,
-            },
-            opacity: 1,
-            y: 0,
-            stagger: 0.08,
-            ease: 'power2.out',
+            scrollTrigger: { trigger: grid, start: 'top 82%', end: 'top 40%', scrub: 0.5 },
+            opacity: 1, y: 0, stagger: 0.08, ease: 'power2.out',
         });
     });
 
     // ─── COMMAND CENTRE — SLIDE IN ───
     gsap.to('.cmd-text', {
-        scrollTrigger: {
-            trigger: '#command',
-            start: 'top 75%',
-            end: 'top 30%',
-            scrub: 0.6,
-        },
+        scrollTrigger: { trigger: '#command', start: 'top 75%', end: 'top 30%', scrub: 0.6 },
         opacity: 1, x: 0, ease: 'power2.out',
     });
     gsap.to('.cmd-phone-wrap', {
-        scrollTrigger: {
-            trigger: '#command',
-            start: 'top 75%',
-            end: 'top 30%',
-            scrub: 0.6,
-        },
+        scrollTrigger: { trigger: '#command', start: 'top 75%', end: 'top 30%', scrub: 0.6 },
         opacity: 1, x: 0, ease: 'power2.out',
     });
-
-    // Phone parallax — subtle float
     gsap.to('.phone', {
-        scrollTrigger: {
-            trigger: '#command',
-            start: 'top bottom',
-            end: 'bottom top',
-            scrub: 1,
-        },
+        scrollTrigger: { trigger: '#command', start: 'top bottom', end: 'bottom top', scrub: 1 },
         y: -60, rotation: 1, ease: 'none',
     });
 
     // ─── ECOSYSTEM ───
+    gsap.set('[data-gsap="eco"]', { opacity: 0, y: 50 });
     gsap.to('[data-gsap="eco"]', {
-        scrollTrigger: {
-            trigger: '.eco-section',
-            start: 'top 80%',
-            end: 'top 40%',
-            scrub: 0.5,
-        },
+        scrollTrigger: { trigger: '.eco-section', start: 'top 80%', end: 'top 40%', scrub: 0.5 },
         opacity: 1, y: 0, ease: 'power2.out',
     });
-    gsap.set('[data-gsap="eco"]', { opacity: 0, y: 50 });
 
     // ─── CTA BOX ───
     gsap.to('[data-gsap="cta"]', {
-        scrollTrigger: {
-            trigger: '.cta-section',
-            start: 'top 80%',
-            end: 'top 45%',
-            scrub: 0.5,
-        },
+        scrollTrigger: { trigger: '.cta-section', start: 'top 80%', end: 'top 45%', scrub: 0.5 },
         opacity: 1, scale: 1, ease: 'power2.out',
     });
 
-    // ─── CARD HOVER GLOW (adds subtle parallax tilt on mouse) ───
-    if (window.matchMedia('(hover: hover)').matches) {
+    // ─── CARD HOVER TILT — DESKTOP ONLY ───
+    if (!isTouch && window.matchMedia('(hover: hover)').matches) {
         document.querySelectorAll('.ethos-card, .feature-card').forEach(card => {
             card.addEventListener('mousemove', e => {
                 const rect = card.getBoundingClientRect();
                 const x = (e.clientX - rect.left) / rect.width - 0.5;
                 const y = (e.clientY - rect.top) / rect.height - 0.5;
-                gsap.to(card, {
-                    rotateY: x * 8,
-                    rotateX: -y * 8,
-                    transformPerspective: 800,
-                    duration: 0.4,
-                    ease: 'power2.out',
-                });
+                gsap.to(card, { rotateY: x * 8, rotateX: -y * 8, transformPerspective: 800, duration: 0.4, ease: 'power2.out' });
             });
             card.addEventListener('mouseleave', () => {
                 gsap.to(card, { rotateY: 0, rotateX: 0, duration: 0.6, ease: 'power2.out' });
